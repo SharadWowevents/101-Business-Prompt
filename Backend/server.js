@@ -62,7 +62,7 @@ app.post('/api/users/login', async (req, res) => {
  */
 app.get('/api/prompts', async (req, res) => {
   try {
-    const prompts = await Wowos_prompt.find().sort({ number: 1 });
+    const prompts = await Prompt.find().sort({ number: 1 });
     res.status(200).json(prompts);
   } catch (error) {
     console.error(error);
@@ -76,7 +76,7 @@ app.get('/api/prompts', async (req, res) => {
  */
 app.post('/api/prompts', async (req, res) => {
   try {
-    const newPrompt = new Wowos_prompt(req.body);
+    const newPrompt = new Prompt(req.body);
     const savedPrompt = await newPrompt.save();
     res.status(201).json(savedPrompt);
   } catch (error) {
