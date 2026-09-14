@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #08090E;
+  --navy2: #0F1118;
+  --navy3: #161A26;
+  --gold: #C9890B;
+  --gold2: #E9A820;
+  --surface: #12151F;
+  --card: #181D2C;
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.12);
+  --text: #F1F0ED;
+  --muted: #8A9BB0;
+  --faint: #4A5568;
+  --green: #10B981;
+}
+
+body {
+  background-color: var(--navy);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono-code {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+}
+
+/* Subtle glowing radial gradient in the dark background for depth */
+.login-bg-glow {
+  background: 
+    radial-gradient(circle at 50% 38%, rgba(201, 137, 11, 0.13) 0%, rgba(15, 17, 24, 0.6) 45%, rgba(8, 9, 14, 1) 85%),
+    var(--navy);
+}
+
+.library-bg {
+  background-color: var(--navy);
+  background-image: 
+    radial-gradient(circle at 20% 0%, rgba(201, 137, 11, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(59, 130, 246, 0.04) 0%, transparent 35%);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--navy2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--faint);
+}
+
+/* Bracket highlighting span */
+.bracket-highlight {
+  color: var(--gold2);
+  font-weight: 600;
+  background-color: rgba(233, 168, 32, 0.08);
+  padding: 0.1rem 0.25rem;
+  border-radius: 3px;
+  border: 1px solid rgba(233, 168, 32, 0.22);
+}
+
+/* Filled variable tag highlight */
+.filled-variable-tag {
+  color: #34D399;
+  font-weight: 600;
+  background-color: rgba(16, 185, 129, 0.12);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  text-decoration: underline decoration-dotted decoration-emerald-500/50 underline-offset-2;
+}

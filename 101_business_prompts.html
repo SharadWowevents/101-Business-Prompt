@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>101 Business Prompts — WOWOS</title>
+<style>
+:root {
+  --navy: #08090E;
+  --navy2: #0F1118;
+  --navy3: #161A26;
+  --gold: #C9890B;
+  --gold2: #E9A820;
+  --sky: #0EA5E9;
+  --sky2: #38BDF8;
+  --green: #10B981;
+  --coral: #E94560;
+  --purple: #8B5CF6;
+  --slate: #64748B;
+  --surface: #12151F;
+  --card: #181D2C;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #F1F0ED;
+  --muted: #8A9BB0;
+  --faint: #4A5568;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: -apple-system, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+button { font-family: inherit; cursor: pointer; }
+
+/* HEADER */
+.header {
+  background: var(--navy2);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.brand { display: flex; flex-direction: column; }
+.brand-tag { font-size: 10px; font-weight: 600; color: var(--gold); letter-spacing: .12em; text-transform: uppercase; }
+.brand-title { font-size: 17px; font-weight: 600; color: var(--text); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.count-pill {
+  background: var(--navy3); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 4px 14px;
+  font-size: 12px; color: var(--muted);
+}
+.count-pill span { color: var(--gold); font-weight: 600; }
+
+/* SEARCH + FILTER */
+.controls {
+  padding: 18px 24px;
+  max-width: 1100px; margin: 0 auto;
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+}
+.search-wrap { position: relative; flex: 1; min-width: 220px; }
+.search-wrap input {
+  width: 100%;
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 10px 14px 10px 40px;
+  font-size: 13px; color: var(--text); outline: none;
+  transition: border-color .15s;
+}
+.search-wrap input:focus { border-color: var(--gold); }
+.search-wrap input::placeholder { color: var(--faint); }
+.search-icon {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  color: var(--faint); font-size: 15px; pointer-events: none;
+}
+.filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.fb {
+  padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: transparent; font-size: 12px; font-weight: 500;
+  color: var(--muted); transition: all .15s; white-space: nowrap;
+}
+.fb:hover { border-color: var(--border2); color: var(--text); }
+.fb.active { color: #fff; border-color: transparent; }
+
+/* MAIN GRID */
+.main { max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
+
+/* AREA SECTION */
+.area-section { margin-bottom: 36px; }
+.area-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0 12px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.area-icon { font-size: 18px; }
+.area-label { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
+.area-count { font-size: 11px; color: var(--faint); margin-left: auto; }
+
+/* PROMPT GRID */
+.prompt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+.prompt-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 15px 12px;
+  display: flex; flex-direction: column; gap: 7px;
+  border-left: 3px solid transparent;
+  transition: border-color .15s, transform .1s;
+  cursor: default;
+}
+.prompt-card:hover { transform: translateY(-1px); }
+.prompt-num {
+  font-size: 10px; font-weight: 600; color: var(--faint);
+  letter-spacing: .05em;
+}
+.prompt-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.35; }
+.prompt-text {
+  font-size: 12px; color: var(--muted); line-height: 1.55;
+  background: rgba(0,0,0,0.2); border-radius: 7px;
+  padding: 8px 10px; border: 1px solid var(--border);
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  word-break: break-word;
+}
+.prompt-text .bracket { color: var(--gold2); }
+.copy-btn {
+  align-self: flex-end;
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px;
+  font-size: 11px; color: var(--muted);
+  transition: all .12s;
+}
+.copy-btn:hover { border-color: var(--border2); color: var(--text); }
+.copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 48px 24px; color: var(--faint); font-size: 14px; }
+
+/* FOOTER */
+.footer {
+  text-align: center; padding: 24px;
+  font-size: 11px; color: var(--faint); border-top: 1px solid var(--border);
+}
+
+/* NO SECTION FOUND */
+.area-section.hidden { display: none; }
+
+@media (max-width: 600px) {
+  .controls { padding: 14px 16px; }
+  .main { padding: 0 16px 60px; }
+  .prompt-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <div class="brand-tag">WOWOS Fast Track</div>
+    <div class="brand-title">101 Business Prompts</div>
+  </div>
+  <div class="header-right">
+    <div class="count-pill">Showing <span id="visible-count">101</span> of 101</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <i class="ti ti-search search-icon" aria-hidden="true"></i>
+    <input type="text" id="search" placeholder="Search prompts..." autocomplete="off">
+  </div>
+  <div class="filter-btns" id="filter-btns">
+    <button class="fb active" data-filter="all" style="">All 101</button>
+    <button class="fb" data-filter="marketing" style="--fc:#C9890B">📣 Marketing</button>
+    <button class="fb" data-filter="sales" style="--fc:#10B981">📈 Sales</button>
+    <button class="fb" data-filter="delivery" style="--fc:#0EA5E9">📦 Delivery</button>
+    <button class="fb" data-filter="finance" style="--fc:#E94560">💰 Finance</button>
+    <button class="fb" data-filter="people" style="--fc:#8B5CF6">👥 People</button>
+    <button class="fb" data-filter="ai" style="--fc:#64748B">🤖 AI</button>
+  </div>
+</div>
+
+<div class="main" id="main"></div>
+
+<div class="footer">WOWOS Fast Track · 101 Business Prompts · wowos.in</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+
+<script>
+const AREAS = [
+  {
+    id:"marketing", icon:"📣", label:"Marketing", color:"#C9890B",
+    desc:"Attract, engage, and convert your ideal clients",
+    prompts:[
+      {n:1, title:"ICP Profile Builder", text:"I run a [type of business] in [city] serving [client type]. Write a detailed Ideal Client Profile including: their job title, daily pain points, what they Google before buying, their biggest objection, and where they spend time online."},
+      {n:2, title:"Competitor Positioning Gap", text:"My business is [describe business]. My top 3 competitors are [names]. Identify 3 positioning gaps where none of them are claiming authority — and write one headline I can own in each gap."},
+      {n:3, title:"Instagram Bio Rewrite", text:"I am a [your role] at [business name] serving [ICP]. Rewrite my Instagram bio to clearly state what I do, who I help, what result I deliver, and include a call to action. Maximum 150 characters."},
+      {n:4, title:"WhatsApp Broadcast Message", text:"Write a WhatsApp broadcast message for my [type of business] announcing [offer/event/news]. Audience: [describe them]. Tone: warm and direct, not corporate. Under 120 words. End with one clear action."},
+      {n:5, title:"LinkedIn Post — Client Win", text:"Write a LinkedIn post about a recent client win: [describe the project and result]. Tell it as a story — problem, what we did, result. First line must stop the scroll. No hashtag spam. Professional but human."},
+      {n:6, title:"Google My Business Description", text:"Write a 750-character Google Business Profile description for my [type of business] in [city]. Include what we do, who we serve, our key differentiator, and a soft call to action. No jargon."},
+      {n:7, title:"Email Subject Line Generator", text:"Generate 10 email subject lines for a campaign about [topic/offer]. Audience: [describe]. Mix curiosity, urgency, and direct benefit approaches. No clickbait. Each under 50 characters."},
+      {n:8, title:"Testimonial Request Message", text:"Write a 3-question WhatsApp message I can send to a past client to get a powerful testimonial. Questions should surface: their problem before us, what changed, and who they would recommend us to."},
+      {n:9, title:"Content Calendar — 4 Weeks", text:"Create a 4-week content calendar for [platform: Instagram/LinkedIn/YouTube] for my [business type]. My ICP is [describe]. Include: post topic, format (reel/carousel/post), and hook line. One post per day."},
+      {n:10, title:"Launch Announcement Copy", text:"Write a product/service launch announcement for [what you are launching]. Audience: [existing clients + warm leads]. Include: the problem it solves, what is new, price or offer, and a clear CTA. WhatsApp-ready."},
+      {n:11, title:"Referral Program Message", text:"Write a message I can send to my top 10 clients asking for referrals. Business: [describe]. What I offer in return: [reward or recognition]. Tone: appreciative, not transactional. Under 80 words."},
+      {n:12, title:"Pinterest Pin Description", text:"Write 5 Pinterest pin descriptions for [topic] targeting [your ICP]. Each should include searchable keywords, a benefit statement, and a call to visit [website/link]. Optimised for search, not just scroll."},
+      {n:13, title:"YouTube Video Title + Description", text:"Write a YouTube title and description for a video about [topic]. Target audience: [describe]. Title: curiosity + benefit, under 60 characters. Description: 150 words, includes keywords, and ends with a CTA."},
+      {n:14, title:"Case Study — One-Page", text:"Write a one-page case study for this client project: Client type: [describe]. Problem: [describe]. What we did: [describe]. Result: [specific numbers]. Format: headline, challenge, solution, outcome, quote placeholder."},
+      {n:15, title:"Ad Copy — Meta Lead Generation", text:"Write a Meta ad for [offer] targeting [audience]. Stage: awareness/consideration/conversion [pick one]. Include: hook line, problem agitation, solution, and one CTA button text. Under 125 words primary text."},
+      {n:16, title:"Brand Story — 3 Paragraphs", text:"Write my brand story in 3 short paragraphs. Business: [name and type]. Founded: [year and reason]. What we believe: [your core belief]. How we are different: [your USP]. Tone: founder-led, warm, credible."},
+      {n:17, title:"Objection Handler — Marketing Version", text:"My prospects often say [top objection]. Write 3 short content pieces (one LinkedIn post, one Instagram caption, one WhatsApp message) that address this objection without sounding defensive. Turn the objection into proof."},
+    ]
+  },
+  {
+    id:"sales", icon:"📈", label:"Sales", color:"#10B981",
+    desc:"Close more deals, follow up better, protect your margin",
+    prompts:[
+      {n:18, title:"Follow-Up Message — Day 1", text:"Write a WhatsApp follow-up message to send 24 hours after a client meeting about [your service/product]. Prospect: [describe]. Tone: warm, not pushy. Reference one specific thing from the meeting. Under 80 words."},
+      {n:19, title:"Follow-Up Sequence — 7 Touches", text:"Write a 7-message WhatsApp follow-up sequence for a prospect who attended our demo but has not responded. Business: [describe]. Space messages over 21 days. Each message has a different angle: value, proof, urgency, story, question, resource, final offer."},
+      {n:20, title:"Sales Proposal Introduction", text:"Write the opening 2 paragraphs of a sales proposal for [client name/type] who needs [their requirement]. Show we understand their problem, reference their specific context, and set up why our solution fits. Confident, not salesy."},
+      {n:21, title:"Price Increase Announcement", text:"Write a message to existing clients announcing a [X]% price increase effective [date]. Reason: [genuine reason]. Tone: honest, appreciative, confident. Include an option to lock in current pricing before the deadline. Under 150 words."},
+      {n:22, title:"Negotiation Floor Calculator Prompt", text:"My product/service costs me [cost] to deliver. My MRP is [price]. My target margin is [X]%. Generate: my target price, my Boundary 1 (first concession), and my floor price. Also suggest 2 value-add offers I can make instead of dropping price."},
+      {n:23, title:"Lost Deal Debrief", text:"I lost a deal to [competitor/reason]. My offer was [describe]. Client chose [alternative] because [reason]. Write 3 specific changes I should make to my pitch, proposal, or follow-up process to win the next similar deal."},
+      {n:24, title:"Cold Outreach — LinkedIn DM", text:"Write a cold LinkedIn DM to a [job title] at a [industry] company to introduce my [product/service]. No pitching in the first message. Lead with a relevant insight or observation. Under 60 words. End with a low-commitment question."},
+      {n:25, title:"Sales Script — First Call", text:"Write a 5-minute first sales call script for selling [product/service] to [ICP]. Include: warm opening, 3 discovery questions, a transition to presentation, and how to handle 'send me more info' as an objection."},
+      {n:26, title:"Dream 100 Outreach Sequence", text:"Write a 6-touch outreach sequence for my Dream 100 list (ideal clients I want to crack). Business: [describe]. Platform: [LinkedIn/email/WhatsApp]. Touches: research → connect → value share → soft ask → case study → meeting invite."},
+      {n:27, title:"Re-engagement — Dormant Client", text:"Write a WhatsApp message to re-engage a client who bought from me [X months] ago and has gone quiet. Context: [what they bought, any reason they might be dormant]. Tone: genuine check-in. No hard sell. Under 60 words."},
+      {n:28, title:"Objection Response — Price Too High", text:"A prospect said 'your price is too high.' My price is [price]. Competitor price is [price]. My key differentiators are [list]. Write a confident, respectful 3-sentence response that reframes value without discounting."},
+      {n:29, title:"Objection Response — Let Me Think About It", text:"A prospect said 'let me think about it' at the end of our meeting. Write 3 different responses I could use — one that uncovers the real objection, one that adds urgency, and one that offers a low-risk next step."},
+      {n:30, title:"Win Analysis — Why They Chose Us", text:"A new client just signed. Write 3 questions I should ask them within 48 hours to understand exactly why they chose us over competitors. Turn their answers into a sales script for the next prospect."},
+      {n:31, title:"Proposal Executive Summary", text:"Write a 200-word executive summary for a proposal to [client type] for [what you are proposing]. Open with their problem in their language. State our solution in one sentence. List 3 outcomes they will get. Close with a clear next step."},
+      {n:32, title:"Sales KPI Weekly Tracker Template", text:"Create a weekly sales KPI tracker template for a team of [X] salespeople. Include columns for: leads contacted, meetings held, proposals sent, follow-ups completed, deals closed, revenue generated, and one qualitative note. Format as a table."},
+      {n:33, title:"Exhibition Booth Script", text:"Write a 60-second conversation starter script for my team to use at [exhibition/event name]. Business: [describe]. We want to capture contact details and book a follow-up meeting. Opening line, 2 qualifying questions, and a closing ask."},
+      {n:34, title:"Warm Audience Reactivation Message", text:"Write a WhatsApp message to send to [X] past clients who have not bought in [X months]. Context: [what they previously bought]. Message should feel like a personal check-in, offer one piece of new value, and open the door without pressure."},
+    ]
+  },
+  {
+    id:"delivery", icon:"📦", label:"Delivery", color:"#0EA5E9",
+    desc:"Deliver on time, communicate proactively, delight clients",
+    prompts:[
+      {n:35, title:"Client Onboarding Welcome Message", text:"Write a WhatsApp welcome message to send within 2 hours of a new client signing. Business: [describe]. Include: a warm welcome, what happens next, who their point of contact is, and what they need to do in the next 24 hours. Under 120 words."},
+      {n:36, title:"Project Progress Update", text:"Write a WhatsApp progress update for a client at the [mid-point/milestone] of their [project type]. What is done: [describe]. What is next: [describe]. Timeline: [dates]. Tone: proactive and confident. Under 100 words. No jargon."},
+      {n:37, title:"Delay Notification Message", text:"Write a professional WhatsApp message to a client informing them of a [X day] delay on their [project/order]. Reason: [honest reason]. New expected date: [date]. Include one thing we are doing to minimise impact. No over-apologising."},
+      {n:38, title:"Project Completion Message", text:"Write a WhatsApp message marking the completion of a [project type] for [client type]. Celebrate the delivery, summarise the result in one line, and ask for: one photo/video testimonial and one referral. Warm, personal, brief."},
+      {n:39, title:"SOP — First Draft", text:"Write the first draft of an SOP for [specific process, e.g. client onboarding / invoice processing / delivery handover]. Format as: purpose, who does this, when, step-by-step instructions (numbered), common mistakes to avoid, and definition of done."},
+      {n:40, title:"Team Daily Briefing", text:"Write a daily briefing template for a [type of team] to fill in and share every morning by 9am. Include: top 3 priorities today, one blocker to flag, one update for the client/team, and a confidence level (green/yellow/red)."},
+      {n:41, title:"Client Feedback Request", text:"Write a 3-question feedback form intro message to send to a client 7 days after project completion. Business: [describe]. Frame it as helping us improve. Keep it easy — 2 minutes max. Include a link placeholder and a thank you note."},
+      {n:42, title:"Definition of Done — Per Role", text:"Write a clear Definition of Done for the [role, e.g. sales coordinator/project manager/delivery executive] in my [business type]. Include: minimum quality standard, what a completed task looks like, what proof is required, and who reviews it."},
+      {n:43, title:"Vendor Brief", text:"Write a vendor brief for [type of vendor] for a project involving [description]. Include: scope of work, our quality standards, delivery timeline, payment terms, and the 3 non-negotiables we will not compromise on."},
+      {n:44, title:"Process Flow Map Prompt", text:"I run a [business type]. Map the step-by-step flow for [key process, e.g. order to delivery / enquiry to project start]. Include every stage, who owns each step, where a decision point exists, and where the process most commonly gets stuck."},
+      {n:45, title:"Post-Project Debrief Template", text:"Create a post-project debrief template for my [business type] to complete within 7 days of every project. Sections: what went well, what went wrong, client satisfaction score, team performance notes, one process improvement to implement, and lessons learned."},
+      {n:46, title:"Quality Checklist — Pre-Delivery", text:"Create a pre-delivery quality checklist for [type of product/service]. Minimum 10 checkpoints. Each checkpoint should be a yes/no question that any team member can answer without ambiguity. Include a sign-off section with date and name."},
+      {n:47, title:"Escalation Protocol", text:"Write a clear escalation protocol for my [business type]. Define: what triggers an escalation, who to escalate to at each level, the expected response time per level, and what information must be shared when escalating. Simple enough for a new joiner."},
+      {n:48, title:"Recurring Task Library Template", text:"Build a recurring task library for the [department] team in my [business type]. List all recurring tasks with: task name, frequency (daily/weekly/monthly), owner, estimated time, and what proof of completion looks like. Format as a table."},
+      {n:49, title:"Client Communication Rhythm", text:"Design a client communication rhythm for a [project type] with a [X week] timeline. Specify: what is communicated, by whom, via which channel, and at what frequency. Goal: zero client chasing. Include trigger-based updates for delays or milestones."},
+      {n:50, title:"Team Accountability Script", text:"Write a script for a weekly 15-minute accountability check-in with a [role, e.g. project coordinator]. Include: 3 questions the manager asks, how to handle a red/yellow status, and how to close with a clear commitment for the coming week."},
+      {n:51, title:"Onboarding Plan — New Hire", text:"Write a 30-day onboarding plan for a new [role] joining my [business type]. Day 1 to Day 30. Include: what they learn each week, who they meet, what they are expected to produce by day 30, and how we define successful onboarding."},
+    ]
+  },
+  {
+    id:"finance", icon:"💰", label:"Finance", color:"#E94560",
+    desc:"Protect your margin, manage cash flow, make decisions from numbers",
+    prompts:[
+      {n:52, title:"Gross Profit Calculator Prompt", text:"My product/service sells for [price]. Direct costs are [list: material, labour, delivery]. Calculate my gross profit in rupees and gross margin as a percentage. Tell me if my margin is healthy for a [type of business] and what the industry benchmark typically is."},
+      {n:53, title:"Break-Even Calculator", text:"My monthly fixed costs are [amount]. My average selling price is [price]. My variable cost per unit is [amount]. Calculate: my break-even in units, break-even in revenue, and how many units I need to sell to achieve [target profit]."},
+      {n:54, title:"Cash Flow Forecast — 90 Days", text:"Help me build a 90-day cash flow forecast. My expected monthly revenue is [amount]. Fixed costs: [list]. Variable costs: [amount per unit or %]. Existing outstanding receivables: [amount]. Create a week-by-week table showing opening balance, inflows, outflows, and closing balance."},
+      {n:55, title:"Outstanding Recovery Message", text:"Write a professional yet firm WhatsApp message to a client with an overdue payment of [amount] due [X days] ago. Tone: relationship-preserving but clear. Include the invoice number, due date, and a specific deadline for payment with a bank details reminder."},
+      {n:56, title:"Vendor Reverse Calculator", text:"I closed a deal at [client price]. My target gross margin is [X]%. My original cost estimate was [amount]. Calculate: my maximum allowable cost, the gap I need to recover from vendors, and rank which cost head I should negotiate first."},
+      {n:57, title:"Profit First Allocation", text:"My business received [total revenue] this month. Using the Profit First method with these percentages — Profit: [X]%, Owner Pay: [X]%, Tax: [X]%, Operating Expenses: [X]% — calculate the rupee amount for each account and tell me the order of allocation."},
+      {n:58, title:"Monthly Finance Review Questions", text:"Generate 10 questions a founder should ask their CA or finance team during a monthly finance review. Cover: revenue vs target, gross margin, net profit, cash position, outstanding, upcoming liabilities, and one forward-looking question about the next 30 days."},
+      {n:59, title:"Invoice Follow-Up Sequence", text:"Write a 4-message invoice follow-up sequence for an overdue payment of [amount]. Message 1: gentle reminder (Day 1 overdue). Message 2: firm (Day 7). Message 3: serious (Day 14). Message 4: final notice (Day 21). Each under 60 words."},
+      {n:60, title:"Pricing Strategy Review", text:"My current price for [product/service] is [price]. My cost is [cost]. Competitor prices range from [low] to [high]. My ideal margin is [X]%. Review my pricing and suggest: whether to increase, decrease, or restructure, and give me 2 alternative pricing models I could consider."},
+      {n:61, title:"Debt Reduction Prioritisation", text:"I have the following liabilities: [list each with amount and interest rate]. Rank them in the optimal payoff sequence to minimise total interest cost. Also calculate: my total monthly debt commitment and what my monthly pressure would be if I cleared the top 2."},
+      {n:62, title:"Unit Economics Analysis", text:"For my product [describe]: selling price [X], raw material cost [X], labour [X], packaging [X], delivery [X], platform fees [X]. Calculate: contribution margin per unit, break-even units per month, and profit at [target volume]. Highlight the biggest cost to optimise."},
+      {n:63, title:"Revenue by Source Breakdown", text:"My business earns revenue from: [source 1: amount], [source 2: amount], [source 3: amount]. Create a breakdown showing: % contribution of each, estimated margin per source, and rank them by profitability. Recommend which source to prioritise and which to reduce."},
+      {n:64, title:"Financial Dashboard KPIs", text:"Design a one-page monthly financial dashboard for a [business type] with [revenue range] revenue. Include the 8 most important numbers a founder should review on the first Monday of every month. Format as a table with: KPI name, how to calculate it, and what good looks like."},
+      {n:65, title:"Project P&L Template", text:"Create a project P&L template for a [type of project] worth [value]. Columns: cost head, budgeted amount, actual amount, variance, and % of total. Include sections for direct costs, indirect costs, contingency, and net project profit. Add a margin summary at the bottom."},
+      {n:66, title:"Finance Checklist — Monthly", text:"Write a monthly finance checklist for a [business type]. Cover: revenue reconciliation, expense review, GST filing status, TDS compliance, outstanding collections, vendor payments, payroll, and cash position. Each item should be a yes/no checkbox with a responsible person column."},
+      {n:67, title:"Non-Negotiables Tracker", text:"List the 5 financial non-negotiables for a business owner running a [business type] with [X] employees. For each: what it is, why it cannot be missed, and what the consequence of missing it is. Format as a one-page commitment card."},
+    ]
+  },
+  {
+    id:"people", icon:"👥", label:"People", color:"#8B5CF6",
+    desc:"Hire right, develop leaders, build a team that runs without you",
+    prompts:[
+      {n:68, title:"Job Description — Any Role", text:"Write a job description for a [role title] at a [type of business] in [city]. Include: role purpose (one sentence), 5 key responsibilities, 3 non-negotiable requirements, 2 nice-to-haves, and a culture statement. Tone: professional but human. No jargon."},
+      {n:69, title:"Interview Question Set", text:"Generate 10 interview questions for a [role title] at a [business type]. Mix: 3 behavioural (tell me about a time...), 3 situational (what would you do if...), 2 role-specific technical, and 2 culture-fit questions. Include what a strong answer looks like for each."},
+      {n:70, title:"30-60-90 Day Onboarding Plan", text:"Write a 30-60-90 day onboarding plan for a [role title] joining a [business type]. Day 1-30: learning and observing. Day 31-60: contributing with guidance. Day 61-90: owning their outcomes independently. Include one measurable output for each phase."},
+      {n:71, title:"KRA and KPI Definition", text:"Define the KRAs and KPIs for a [role title] in a [business type]. List: 4 Key Result Areas (broad responsibilities), and for each KRA, 2-3 measurable KPIs. Include: how to measure each KPI, frequency of review, and what good performance looks like."},
+      {n:72, title:"Performance Review Template", text:"Write a monthly performance review template for a [role title]. Include: self-assessment (3 questions), manager assessment (5 criteria rated 1-5), KPI scorecard, one area of excellence, one area to improve, and a commitment section for next month."},
+      {n:73, title:"Recognition Message — Star of the Week", text:"Write 5 different 'Star of the Week' recognition messages for a [business type] team. Each should: name a specific achievement, explain why it matters to the business, and inspire the rest of the team. Warm, genuine, not generic."},
+      {n:74, title:"Underperformer Conversation Script", text:"Write a script for a private 1:1 conversation with an underperforming [role title]. The issue: [describe]. Tone: caring but clear. Structure: open with curiosity, state the gap with evidence, ask what is getting in the way, and agree on one specific change with a timeline."},
+      {n:75, title:"PIB — Performance Improvement Brief", text:"Write a Performance Improvement Brief for [role title] whose performance gap is [describe]. Include: expected standard, current performance, specific examples of the gap, support we will provide, target to achieve, review date, and consequence if unchanged."},
+      {n:76, title:"Exit Interview Questions", text:"Write 8 exit interview questions for a team member leaving a [business type]. Goal: understand the real reason they are leaving and surface any systemic issue. Mix direct and open-ended questions. Ensure the conversation feels safe, not defensive."},
+      {n:77, title:"Hiring Ad — Meta / LinkedIn", text:"Write a hiring ad for a [role title] position at a [business type] in [city]. Platform: [Meta/LinkedIn]. Include: what makes this role exciting, what kind of person thrives here, the role in one line, and a clear apply CTA. Under 150 words. No clichés."},
+      {n:78, title:"Team Culture Code", text:"Write a Team Culture Code for my [business type]. Include: 3 behaviours we always reward, 3 behaviours we never tolerate, and one line describing what it feels like to work here at its best. Keep each statement specific — no generic values."},
+      {n:79, title:"Weekly Team Huddle Agenda", text:"Design a 15-minute daily team huddle agenda for a [department] team of [X] people. Structure: what happened yesterday, what is happening today, one blocker, one win. Include the exact questions the team lead should ask. No status meetings disguised as huddles."},
+      {n:80, title:"Captain Builder — Identification Criteria", text:"I want to identify captain-level leaders in my [business type] team. Write 4 criteria to evaluate each team member with a 1-5 scoring guide for each. Criteria should assess: ownership mindset, team influence, growth hunger, and composure under pressure."},
+      {n:81, title:"Retention Risk Assessment", text:"Write 5 questions a manager should ask themselves about each key team member to assess flight risk. For each question, include: what the answer reveals and what action to take if the answer is concerning. Format as a monthly self-review tool."},
+      {n:82, title:"Salary Benchmarking Prompt", text:"I am hiring a [role title] in [city] for a [business type] with [X years experience required]. What is the typical salary range for this role in India right now? Also suggest: the right salary structure (fixed/variable split), and what non-monetary benefits attract strong candidates."},
+      {n:83, title:"Delegation Decision Framework", text:"Help me build a delegation decision framework for my team. For any task I currently do myself, generate a checklist of 5 questions to decide: should I delegate this, to whom, with what authority level, and how to hand it over without losing quality."},
+      {n:84, title:"Heart-to-Heart Conversation Guide", text:"Write a guide for a monthly heart-to-heart 1:1 with each key team member. Include: 4 questions to ask, how to create psychological safety, how to handle difficult disclosures, and how to close with a clear action. Duration: 20 minutes."},
+    ]
+  },
+  {
+    id:"ai", icon:"🤖", label:"AI", color:"#64748B",
+    desc:"Use AI as a thinking partner — not a search engine",
+    prompts:[
+      {n:85, title:"Custom GPT Instruction Builder", text:"Help me write instructions for a Custom GPT for my [business type]. It should: answer questions about [topic], follow this tone [describe], never do [no-go rules], and always end with [specific CTA or action]. Write the full instruction set in under 800 words."},
+      {n:86, title:"Business Problem Solver", text:"I am the founder of a [business type]. I have this problem: [describe the problem clearly]. Give me: 3 possible root causes, 2 possible solutions for each, the fastest one to implement this week, and one question I should ask my team to diagnose it better."},
+      {n:87, title:"Decision-Making Framework", text:"I need to make a decision about [decision]. Options are: [Option A] and [Option B]. My priorities are [list 2-3]. Give me: pros and cons of each option weighted by my priorities, a recommendation with one clear reason, and the one thing I need to confirm before deciding."},
+      {n:88, title:"Meeting Agenda Builder", text:"Build an agenda for a [type of meeting, e.g. Monday morning meeting / client review / team retrospective]. Duration: [X mins]. Attendees: [describe roles]. Include: time per section, the question to open each section, and who is responsible for each agenda item."},
+      {n:89, title:"AI Tool ROI Calculator Prompt", text:"I am spending [amount] per month on [AI tool name] for [what I use it for]. It saves approximately [X hours] per week across [X] team members. Calculate: monthly value of time saved (at [hourly rate]), ROI as a multiple, and whether I should keep, cut, or expand this tool."},
+      {n:90, title:"Knowledge Base Entry — Any Topic", text:"Write a knowledge base entry for my team about [topic/process]. Format: title, one-sentence summary, step-by-step process (numbered), common mistakes to avoid, FAQ section (3 questions), and last-updated date field. Tone: clear enough for a new joiner to follow alone."},
+      {n:91, title:"Prompt Refinement — Improve Any Prompt", text:"Here is a prompt I wrote: [paste your prompt]. Identify: what context is missing, what instruction is unclear, what no-go rule I should add, and what format I should specify. Then rewrite it as a high-quality S.I.G.N.A.L. prompt."},
+      {n:92, title:"Weekly Report Generator", text:"Write a template prompt I can give my team to auto-generate a weekly report for [department]. The report should cover: top 3 wins, top 3 challenges, KPI scorecard (with green/yellow/red), one decision needed from me, and next week's top priorities. Output in WhatsApp-friendly format."},
+      {n:93, title:"Training Video Script", text:"Write a 3-minute training video script for new [role title] team members about [process/topic]. Format: hook (15 sec), what we do and why (45 sec), step-by-step how (90 sec), common mistakes (20 sec), summary and next step (10 sec). Conversational, not corporate."},
+      {n:94, title:"AI Agent Brief", text:"Help me design an AI agent for my [business type]. Its job: [describe the task, e.g. qualify leads / answer client FAQs / generate daily reports]. Inputs it receives: [describe]. Output it produces: [describe]. Escalation trigger: when should it hand off to a human?"},
+      {n:95, title:"Data Analysis Prompt", text:"I have a spreadsheet of [describe data, e.g. sales records / lead data / expense reports]. Analyse it and tell me: the top 3 insights, one trend I might be missing, the single most actionable change I can make based on this data, and any anomalies to investigate."},
+      {n:96, title:"Email Inbox Triage Prompt", text:"I have [X] unread emails. Categorise them into: urgent and needs my personal response, can be delegated to [role], can be auto-replied to using a template, and can be archived. For the urgent ones, draft a one-line response I can approve and send."},
+      {n:97, title:"Competitive Intelligence Brief", text:"Research my competitor [company name] in the [industry] space. Summarise: their positioning, pricing (if public), what customers say about them (reviews), their apparent weakness, and one gap I can exploit in my own marketing and sales. Cite sources where possible."},
+      {n:98, title:"Content Repurposing Plan", text:"I have a [X minute video / blog post / podcast episode] about [topic]. Create a repurposing plan that turns it into: 1 LinkedIn post, 3 Instagram carousels, 1 WhatsApp broadcast, 5 tweet-length insights, and 1 email newsletter section. Give me the angle for each format."},
+      {n:99, title:"Context Window Refresh Prompt", text:"We have been working on [topic] for several messages. Please summarise everything we have discussed so far — key decisions made, options considered, and where we left off — so we can continue without losing any context. Be specific, not generic."},
+      {n:100, title:"Voice and Tone Calibration", text:"Here are 3 samples of my writing: [paste samples]. Analyse my writing style and create a voice profile for me including: sentence length, vocabulary level, how I express authority, how I handle humour, and 5 words I commonly use. Use this profile to write future content in my voice."},
+      {n:101, title:"Business Strategy Stress Test", text:"Here is my [quarterly/annual] business strategy: [describe in brief]. Play the role of a critical board member and stress test it. Identify: the 3 biggest assumptions I am making, the 2 most likely points of failure, one scenario I have not planned for, and one question I should be able to answer but probably cannot yet."},
+    ]
+  }
+];
+
+const AREA_COLORS = {
+  marketing:"#C9890B", sales:"#10B981", delivery:"#0EA5E9",
+  finance:"#E94560", people:"#8B5CF6", ai:"#64748B"
+};
+const FILTER_ACTIVE = {
+  marketing:"background:#C9890B;color:#fff",
+  sales:"background:#10B981;color:#fff",
+  delivery:"background:#0EA5E9;color:#fff",
+  finance:"background:#E94560;color:#fff",
+  people:"background:#8B5CF6;color:#fff",
+  ai:"background:#64748B;color:#fff",
+  all:"background:#C9890B;color:#fff"
+};
+
+let currentFilter = "all";
+let searchQuery = "";
+
+function highlightBrackets(text) {
+  return text.replace(/\[([^\]]+)\]/g, '<span class="bracket">[$1]</span>');
+}
+
+function renderAll() {
+  const main = document.getElementById("main");
+  let visibleCount = 0;
+  let html = "";
+
+  AREAS.forEach(area => {
+    const areaColor = AREA_COLORS[area.id];
+    if (currentFilter !== "all" && currentFilter !== area.id) return;
+
+    const filtered = area.prompts.filter(p => {
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      return p.title.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
+    });
+
+    if (filtered.length === 0) return;
+    visibleCount += filtered.length;
+
+    html += `<div class="area-section">
+      <div class="area-head">
+        <span class="area-icon">${area.icon}</span>
+        <span class="area-label" style="color:${areaColor}">${area.label}</span>
+        <span style="font-size:12px;color:var(--faint);margin-left:4px">— ${area.desc}</span>
+        <span class="area-count">${filtered.length} prompts</span>
+      </div>
+      <div class="prompt-grid">`;
+
+    filtered.forEach(p => {
+      html += `<div class="prompt-card" style="border-left-color:${areaColor}">
+        <div class="prompt-num">#${p.n} · ${area.label.toUpperCase()}</div>
+        <div class="prompt-title">${p.title}</div>
+        <div class="prompt-text">${highlightBrackets(p.text)}</div>
+        <button class="copy-btn" onclick="copyPrompt(this,'${p.n}')">Copy prompt</button>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  if (html === "") {
+    html = `<div class="empty">No prompts found for "<strong>${searchQuery}</strong>"</div>`;
+  }
+
+  main.innerHTML = html;
+  document.getElementById("visible-count").textContent = visibleCount;
+}
+
+function copyPrompt(btn, num) {
+  const card = btn.closest(".prompt-card");
+  const textEl = card.querySelector(".prompt-text");
+  const text = textEl.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = "✓ Copied";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Copy prompt"; btn.classList.remove("copied"); }, 2000);
+  }).catch(() => {
+    btn.textContent = "Copy manually";
+  });
+}
+
+// Filter buttons
+document.getElementById("filter-btns").addEventListener("click", e => {
+  const btn = e.target.closest(".fb");
+  if (!btn) return;
+  const f = btn.dataset.filter;
+  currentFilter = f;
+  document.querySelectorAll(".fb").forEach(b => {
+    b.classList.remove("active");
+    b.removeAttribute("style");
+  });
+  btn.classList.add("active");
+  btn.style.cssText = FILTER_ACTIVE[f] || FILTER_ACTIVE.all;
+  renderAll();
+});
+
+// Search
+document.getElementById("search").addEventListener("input", e => {
+  searchQuery = e.target.value.trim();
+  renderAll();
+});
+
+// Init active style
+document.querySelector('.fb[data-filter="all"]').style.cssText = FILTER_ACTIVE.all;
+
+renderAll();
+</script>
+</body>
+</html>

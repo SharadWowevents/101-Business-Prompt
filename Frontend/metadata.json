@@ -1,0 +1,6 @@
+{
+  "name": "WOWOS Fast Track — 101 Business Prompts",
+  "description": "Executive dark mode Business Prompt Library featuring prompt name browsing, interactive variable input customizer, live preview, and one-click filled prompt copying.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WOWOS Fast Track — 101 Business Prompts</title>
+  <style>
+    /* 1. Global Design System & Theme */
+    :root {
+      --navy: #08090E;
+      --navy2: #0F1118;
+      --navy3: #161A26;
+      --gold: #C9890B;
+      --gold2: #E9A820;
+      --surface: #12151F;
+      --card: #181D2C;
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.12);
+      --text: #F1F0ED;
+      --muted: #8A9BB0;
+      --faint: #4A5568;
+      --green: #10B981;
+
+      /* Category Colors */
+      --cat-marketing: #EC4899;
+      --cat-sales: #E9A820;
+      --cat-delivery: #3B82F6;
+      --cat-finance: #10B981;
+      --cat-people: #8B5CF6;
+      --cat-ai: #06B6D4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--navy);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Typography */
+    .mono {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    /* View 1: Login Gateway */
+    #login-view {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: 
+        radial-gradient(circle at 50% 40%, rgba(201, 137, 11, 0.12) 0%, rgba(15, 17, 24, 0.6) 45%, rgba(8, 9, 14, 1) 85%),
+        var(--navy);
+      transition: opacity 0.3s ease;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-subtitle {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.875rem;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-bottom: 2px solid var(--border);
+      border-radius: 6px 6px 0 0;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input::placeholder {
+      color: var(--faint);
+    }
+
+    .form-input:focus {
+      border-bottom-color: var(--gold);
+    }
+
+    .error-msg {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      font-size: 0.75rem;
+      padding: 0.6rem;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.9rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(201, 137, 11, 0.25);
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-submit:hover {
+      background: var(--gold2);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    .btn-submit:disabled {
+      cursor: wait;
+      opacity: 0.9;
+    }
+
+    /* View 2: The Prompt Library */
+    #library-view {
+      display: none;
+      min-height: 100vh;
+      background: 
+        radial-gradient(circle at 15% 0%, rgba(201, 137, 11, 0.04) 0%, transparent 40%),
+        var(--navy);
+    }
+
+    /* Header */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(8, 9, 14, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-brand .eyebrow-small {
+      color: var(--gold);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .header-brand .title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .counter-pill {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .counter-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Controls: Search & Filter */
+    .controls-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      width: 16px;
+      height: 16px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.875rem;
+      padding: 0.65rem 1rem 0.65rem 2.5rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--gold);
+    }
+
+    .search-input::placeholder {
+      color: var(--faint);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+
+    .btn-filter {
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .btn-filter:hover {
+      color: var(--text);
+      background: var(--navy3);
+    }
+
+    .btn-filter.active {
+      background: var(--gold);
+      color: var(--navy);
+      border-color: var(--gold);
+    }
+
+    /* Grid Layout */
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Card Design - Showing only prompt names on library view */
+    .prompt-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .prompt-card:hover {
+      border-color: rgba(201, 137, 11, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-top-accent {
+      height: 4px;
+      width: 100%;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .prompt-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .category-badge {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 1.25rem;
+      transition: color 0.15s ease;
+    }
+
+    .prompt-card:hover .card-title {
+      color: var(--gold2);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .card-action-cue {
+      color: var(--gold);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: transform 0.15s ease;
+    }
+
+    .prompt-card:hover .card-action-cue {
+      transform: translateX(2px);
+    }
+
+    /* Modal / Customizer Overlay */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 1000px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--navy2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-back {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid transparent;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-back:hover {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.4rem;
+      border-radius: 6px;
+      font-size: 1.25rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s ease;
+    }
+
+    .btn-close:hover {
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      divide-x: 1px solid var(--border);
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 850px) {
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .modal-inputs-col {
+      padding: 1.5rem;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-preview-col {
+      padding: 1.5rem;
+      background: rgba(15, 17, 24, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.25rem;
+      overflow-y: auto;
+    }
+
+    .col-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .var-input-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+
+    .var-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .var-field {
+      width: 100%;
+      background: var(--navy);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .var-field:focus {
+      border-color: var(--gold);
+    }
+
+    .prompt-preview-box {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-size: 0.825rem;
+      line-height: 1.65;
+      color: #D6DCE7;
+      min-height: 220px;
+      flex: 1;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .bracket-highlight {
+      color: var(--gold2);
+      font-weight: 600;
+      background: rgba(233, 168, 32, 0.08);
+      border: 1px solid rgba(233, 168, 32, 0.22);
+      padding: 0.05rem 0.25rem;
+      border-radius: 3px;
+    }
+
+    .filled-variable-tag {
+      color: #34D399;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.05rem 0.3rem;
+      border-radius: 3px;
+    }
+
+    .btn-copy-filled {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.875rem;
+      border: none;
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 15px rgba(201, 137, 11, 0.25);
+    }
+
+    .btn-copy-filled:hover {
+      background: var(--gold2);
+    }
+
+    .btn-copy-filled.copied {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-sample {
+      background: var(--surface);
+      color: var(--gold2);
+      border: 1px solid rgba(201, 137, 11, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-sample:hover {
+      background: rgba(201, 137, 11, 0.15);
+      color: #fff;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ==============================================
+       VIEW 1: THE LOGIN GATEWAY
+  ============================================== -->
+  <div id="login-view">
+    <div class="login-card">
+      <div class="eyebrow">WOWOS FAST TRACK</div>
+      <h1 class="login-title">Access the 101 Business Prompts</h1>
+      <p class="login-subtitle">Enter your credentials to unlock the executive prompt vault.</p>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-name">Name</label>
+          <input type="text" id="login-name" class="form-input" placeholder="e.g. Alex Morgan" autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-input" placeholder="alex@company.com" autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-mobile">Mobile Number</label>
+          <input type="tel" id="login-mobile" class="form-input" placeholder="+1 (555) 019-2834" autocomplete="tel">
+        </div>
+
+        <div id="login-error" class="error-msg">Please fill out all fields to proceed.</div>
+
+        <button type="submit" id="login-btn" class="btn-submit">
+          Access Prompts
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       VIEW 2: THE PROMPT LIBRARY (Hidden by default)
+  ============================================== -->
+  <div id="library-view">
+    <!-- Sticky Top Navigation -->
+    <header class="sticky-header">
+      <div class="header-brand">
+        <span class="eyebrow-small">WOWOS FAST TRACK</span>
+        <span class="title">101 Business Prompts</span>
+      </div>
+      <div class="counter-pill">
+        <span class="counter-dot"></span>
+        <span id="counter-text">Showing 0 of 0</span>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+      <!-- Controls: Search & Category Filters -->
+      <section class="controls-card">
+        <div class="search-wrapper">
+          <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-bar" class="search-input" placeholder="Search prompts by keyword, bracket variable, or title...">
+        </div>
+
+        <div class="filter-buttons" id="filter-buttons-container">
+          <button class="btn-filter active" data-category="All">All</button>
+          <button class="btn-filter" data-category="Marketing">Marketing</button>
+          <button class="btn-filter" data-category="Sales">Sales</button>
+          <button class="btn-filter" data-category="Delivery">Delivery</button>
+          <button class="btn-filter" data-category="Finance">Finance</button>
+          <button class="btn-filter" data-category="People">People</button>
+          <button class="btn-filter" data-category="AI">AI</button>
+        </div>
+      </section>
+
+      <!-- Grid Layout: Shows only prompt names -->
+      <div id="prompt-grid" class="prompt-grid"></div>
+    </main>
+
+    <!-- Modal Customizer for Filling Prompt Inputs -->
+    <div id="modal-customizer" class="modal-backdrop">
+      <div class="modal-box">
+        <div id="modal-top-accent" class="card-top-accent" style="height: 5px; background: var(--gold);"></div>
+        <div class="modal-header">
+          <div class="modal-header-left">
+            <button type="button" id="modal-back-btn" class="btn-back">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              <span>Back to Prompts</span>
+            </button>
+            <div>
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.15rem;">
+                <span id="modal-prompt-number" class="mono" style="font-size:0.75rem; font-weight:700; color:var(--gold);">#01</span>
+                <span id="modal-category-badge" class="category-badge">Marketing</span>
+              </div>
+              <h2 id="modal-prompt-title" style="font-size:1.05rem; font-weight:700; margin:0; color:var(--text);">Prompt Title</h2>
+            </div>
+          </div>
+          <button type="button" id="modal-close-btn" class="btn-close" title="Close (Esc)">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Inputs Column -->
+          <div class="modal-inputs-col">
+            <div class="col-title">
+              <span>Fill Prompt Inputs</span>
+              <button type="button" id="modal-fill-sample-btn" class="btn-sample">Fill Sample Data</button>
+            </div>
+            <div id="modal-inputs-list" style="display:flex; flex-direction:column; gap:0.75rem;"></div>
+          </div>
+
+          <!-- Preview & Copy Column -->
+          <div class="modal-preview-col">
+            <div>
+              <div class="col-title" style="margin-bottom:0.75rem;">
+                <span>Live Completed Prompt</span>
+                <span id="modal-vars-count" style="font-size:0.7rem; color:var(--gold2);">0 filled</span>
+              </div>
+              <div id="modal-prompt-preview" class="prompt-preview-box mono"></div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <button type="button" id="modal-copy-filled-btn" class="btn-copy-filled">
+                Copy prompt with filled inputs
+              </button>
+              <button type="button" id="modal-copy-template-btn" class="btn-filter" style="width:100%; text-align:center;">
+                Copy original template (with [brackets])
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       DATA & JAVASCRIPT LOGIC
+  ============================================== -->
+  <script>
+    // Prompt Data Structure
+    const PROMPTS_DATA = [
+      {
+        id: 1,
+        category: 'Marketing',
+        color: 'var(--cat-marketing)',
+        title: 'Irresistible Value Proposition & Hook Generator',
+        prompt: 'Act as a world-class direct-response copywriter. Analyze my target audience: [Target Audience] and my core offering: [Product/Service Description]. Generate 5 distinct, punchy value propositions using the "Pain-Agitate-Solve" framework. Include 3 thumb-stopping hooks suitable for [Marketing Channel, e.g., LinkedIn / Meta Ads] that emphasize our key differentiator: [Unique Differentiator].'
+      },
+      {
+        id: 2,
+        category: 'Marketing',
+        color: 'var(--cat-marketing)',
+        title: 'High-Converting Cold Outreach Email Sequence',
+        prompt: 'Write a 4-part cold email sequence targeting [Job Title, e.g., VP of Engineering] at [Target Industry] companies with [Company Size, e.g., 50-250 employees]. Each email must stay under 120 words. Focus on addressing [Primary Pain Point] without sounding salesy. Include a soft call-to-action inviting them to review our [Lead Magnet / Case Study].'
+      },
+      {
+        id: 3,
+        category: 'Marketing',
+        color: 'var(--cat-marketing)',
+        title: 'Customer Persona & Psychographic Teardown',
+        prompt: 'Build an in-depth ICP (Ideal Customer Profile) for [Product Category]. Our typical buyer is [Role/Demographic]. Detail their: 1) Top 3 daily frustrations, 2) Professional KPIs they are evaluated on, 3) Hidden objections when considering [Solution Type], and 4) The exact trigger event that forces them to buy within [Timeframe].'
+      },
+      {
+        id: 4,
+        category: 'Sales',
+        color: 'var(--cat-sales)',
+        title: 'Executive Discovery Call Framework',
+        prompt: 'Act as an enterprise sales director. Write a structured 30-minute discovery call script for selling [Product/Service] to [Buyer Persona]. Include 5 open-ended diagnostic questions to uncover the financial impact of [Specific Problem], 2 tactical pivot questions if they say "[Common Brush-off Objection]", and a closing question to lock in a second meeting.'
+      },
+      {
+        id: 5,
+        category: 'Sales',
+        color: 'var(--cat-sales)',
+        title: 'Objection-Handling Playbook for Price Resistance',
+        prompt: 'Provide a 4-step framework to neutralize the prospect objection: "Your price of [Price Point] is significantly higher than [Alternative Solution]." Structure the response to reframe price as an investment return based on [Expected ROI / Cost of Inaction]. Include verbatim dialogue scripts for the account executive to deliver with confidence.'
+      },
+      {
+        id: 6,
+        category: 'Sales',
+        color: 'var(--cat-sales)',
+        title: 'Enterprise Proposal Executive Summary',
+        prompt: 'Draft a high-impact, 1-page executive summary for a proposal sent to [Client Executive Title] at [Client Company]. Synthesize their current bottleneck: [Client Challenge], quantify the projected upside: [Target Metric / Revenue Impact], present our 3-phase rollout of [Solution Name], and specify the pilot investment of [Budget Amount].'
+      },
+      {
+        id: 7,
+        category: 'Delivery',
+        color: 'var(--cat-delivery)',
+        title: 'White-Glove Client Onboarding SOP',
+        prompt: 'Draft a comprehensive 14-day client onboarding standard operating procedure (SOP) for our service: [Service Offering]. Break it down into: Day 1 (Welcome & Asset Gathering), Day 3 (Kickoff Call Agenda), Day 7 (Quick Win Delivery), and Day 14 (Initial Review). Include automated email templates and an onboarding checklist for [Account Manager Role].'
+      },
+      {
+        id: 8,
+        category: 'Delivery',
+        color: 'var(--cat-delivery)',
+        title: 'Project Scope Creep Containment Protocol',
+        prompt: 'Act as a seasoned operations consultant. Write a professional email response to a client who just asked for [Unscoped Deliverable / Feature Request] within our fixed-scope engagement: [Project Name]. Acknowledge the value of the idea, gently explain the boundary without confrontation, and present two clear options: [Change Order with Price / Phased V2 Rollout].'
+      },
+      {
+        id: 9,
+        category: 'Finance',
+        color: 'var(--cat-finance)',
+        title: 'Unit Economics & Customer Lifetime Value Audit',
+        prompt: 'Analyze the unit economics for our business model: [Subscription / Agency / E-commerce]. Given an Average Order Value / ARPU of [ARPU], Customer Acquisition Cost (CAC) of [CAC], and monthly churn rate of [Churn Rate %], calculate: 1) Estimated LTV, 2) LTV:CAC ratio, 3) CAC Payback period in months, and 4) Top 3 levers to increase contribution margin by [Target %].'
+      },
+      {
+        id: 10,
+        category: 'Finance',
+        color: 'var(--cat-finance)',
+        title: 'Cash Flow Runway & Burn Optimization Plan',
+        prompt: 'Act as a fractional CFO. Our company currently has [Cash Balance in Bank] in reserves with a gross monthly burn of [Monthly Expenses] and monthly recurring revenue of [Current MRR]. Build a 3-scenario runway model (Conservative, Base, Aggressive) and propose 5 immediate expense rationalization actions to extend runway by [Target Additional Months].'
+      },
+      {
+        id: 11,
+        category: 'People',
+        color: 'var(--cat-people)',
+        title: 'High-Impact Job Description & Scorecard',
+        prompt: 'Create an outcome-oriented Job Scorecard (not a boring task list) for hiring a [Job Title, e.g., Head of Growth / Senior Full-Stack Engineer]. Define the role’s North Star Mission, 3 measurable outcomes expected within [Timeframe, e.g., 90 Days], and 5 non-negotiable behavioral competencies required to succeed in our culture: [Core Company Value].'
+      },
+      {
+        id: 12,
+        category: 'People',
+        color: 'var(--cat-people)',
+        title: 'Radical Candor Performance Feedback Script',
+        prompt: 'Provide a managerial conversation guide for delivering constructive feedback to an employee [Employee Name / Role] who is struggling with [Performance Issue, e.g., Missing Project Deadlines]. Structure using the SBI model (Situation, Behavior, Impact). Keep the tone supportive yet firm, establish clear accountability, and agree on an action plan for review in [Review Period, e.g., 2 Weeks].'
+      },
+      {
+        id: 13,
+        category: 'AI',
+        color: 'var(--cat-ai)',
+        title: 'Autonomous Executive Assistant System Prompt',
+        prompt: 'You are the Chief of Staff and AI Executive Assistant to [Executive Name/Title] at [Company Name]. Your mandate is to prioritize incoming communications, synthesize complex briefs into 3 bullet points, and draft replies matching their tone: [Concise, direct, and warm]. Never commit to meetings without checking [Calendar Rules]. Always flag financial risks above [Threshold Amount].'
+      },
+      {
+        id: 14,
+        category: 'AI',
+        color: 'var(--cat-ai)',
+        title: 'Automated Customer Support Triage & Resolution Agent',
+        prompt: 'Act as a Tier-2 Support Automation Specialist for [Company Product]. Analyze the following customer ticket: [Customer Complaint/Inquiry]. 1) Classify ticket urgency (P1 Critical to P4 Minor), 2) Detect sentiment and churn probability, 3) Extract key metadata: [Account ID / Error Code], and 4) Generate an empathetic, step-by-step resolution referencing our docs: [Knowledge Base Link].'
+      }
+    ];
+
+    // State Variables
+    let currentCategory = 'All';
+    let searchQuery = '';
+
+    // DOM Elements
+    const loginView = document.getElementById('login-view');
+    const libraryView = document.getElementById('library-view');
+    const loginForm = document.getElementById('login-form');
+    const nameInput = document.getElementById('login-name');
+    const emailInput = document.getElementById('login-email');
+    const mobileInput = document.getElementById('login-mobile');
+    const errorMsg = document.getElementById('login-error');
+    const loginBtn = document.getElementById('login-btn');
+    const promptGrid = document.getElementById('prompt-grid');
+    const counterText = document.getElementById('counter-text');
+    const searchBar = document.getElementById('search-bar');
+    const filterContainer = document.getElementById('filter-buttons-container');
+
+    // ─── LOGIN GATEWAY LOGIC ───
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+
+      const nameVal = nameInput.value.trim();
+      const emailVal = emailInput.value.trim();
+      const mobileVal = mobileInput.value.trim();
+
+      // Form validation
+      if (!nameVal || !emailVal || !mobileVal) {
+        errorMsg.textContent = 'Please fill out all fields to proceed.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      // Valid: Change button text to "Verifying..." for 1.5s
+      loginBtn.textContent = 'Verifying...';
+      loginBtn.disabled = true;
+
+      setTimeout(function() {
+        loginView.style.display = 'none';
+        libraryView.style.display = 'block';
+        renderGrid();
+      }, 1500);
+    });
+
+    // ─── BRACKET HIGHLIGHTING FUNCTION ───
+    function highlightBrackets(text) {
+      // Escape HTML entities
+      const safe = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+      // Regex replace to wrap any text inside brackets [like this]
+      return safe.replace(/(\[[^\]]+\])/g, '<span class="bracket-highlight">$1</span>');
+    }
+
+    // ─── VARIABLE PARSING & PROMPT BUILDING ───
+    function extractVariables(promptText) {
+      const matches = promptText.match(/\[([^\]]+)\]/g) || [];
+      const seen = new Set();
+      const vars = [];
+      matches.forEach(raw => {
+        const inner = raw.slice(1, -1).trim();
+        if (!seen.has(inner)) {
+          seen.add(inner);
+          let label = inner;
+          let placeholder = 'Enter ' + inner.toLowerCase() + '...';
+          if (inner.includes(', e.g.,') || inner.includes(', e.g.')) {
+            const splitIdx = inner.indexOf(', e.g');
+            label = inner.slice(0, splitIdx).trim();
+            placeholder = inner.slice(splitIdx + 2).trim();
+          }
+          vars.push({ raw, key: inner, label, placeholder });
+        }
+      });
+      return vars;
+    }
+
+    function buildFilledPrompt(promptText, values) {
+      return promptText.replace(/\[([^\]]+)\]/g, (match, inner) => {
+        const key = inner.trim();
+        const val = values[key];
+        return (val !== undefined && val.trim() !== '') ? val.trim() : match;
+      });
+    }
+
+    function highlightFilledPrompt(promptText, values) {
+      const safe = promptText
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+      return safe.replace(/\[([^\]]+)\]/g, (match, inner) => {
+        const key = inner.trim();
+        const val = values[key];
+        if (val !== undefined && val.trim() !== '') {
+          const safeVal = val.trim().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          return `<span class="filled-variable-tag">${safeVal}</span>`;
+        }
+        return `<span class="bracket-highlight">${match}</span>`;
+      });
+    }
+
+    // Modal state
+    let activePrompt = null;
+    let inputValues = {};
+
+    const modalCustomizer = document.getElementById('modal-customizer');
+    const modalTopAccent = document.getElementById('modal-top-accent');
+    const modalPromptNumber = document.getElementById('modal-prompt-number');
+    const modalCategoryBadge = document.getElementById('modal-category-badge');
+    const modalPromptTitle = document.getElementById('modal-prompt-title');
+    const modalInputsList = document.getElementById('modal-inputs-list');
+    const modalPromptPreview = document.getElementById('modal-prompt-preview');
+    const modalVarsCount = document.getElementById('modal-vars-count');
+    const modalFillSampleBtn = document.getElementById('modal-fill-sample-btn');
+    const modalCopyFilledBtn = document.getElementById('modal-copy-filled-btn');
+    const modalCopyTemplateBtn = document.getElementById('modal-copy-template-btn');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalBackBtn = document.getElementById('modal-back-btn');
+
+    function openModal(item) {
+      activePrompt = item;
+      inputValues = {};
+
+      const numStr = '#' + String(item.id).padStart(2, '0');
+      modalTopAccent.style.backgroundColor = item.color;
+      modalPromptNumber.textContent = numStr;
+      modalCategoryBadge.textContent = item.category;
+      modalCategoryBadge.style.color = item.color;
+      modalCategoryBadge.style.backgroundColor = item.color + '1a';
+      modalCategoryBadge.style.borderColor = item.color + '33';
+      modalPromptTitle.textContent = item.title;
+
+      const vars = extractVariables(item.prompt);
+
+      // Render inputs
+      modalInputsList.innerHTML = vars.map((v, i) => `
+        <div class="var-input-card">
+          <label class="var-label" for="var-in-${i}">${i + 1}. ${v.label}</label>
+          <input type="text" id="var-in-${i}" data-key="${v.key}" class="var-field" placeholder="${v.placeholder}">
+        </div>
+      `).join('');
+
+      // Attach input listeners
+      modalInputsList.querySelectorAll('.var-field').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const k = e.target.getAttribute('data-key');
+          inputValues[k] = e.target.value;
+          updateModalPreview();
+        });
+      });
+
+      updateModalPreview();
+      modalCustomizer.classList.add('active');
+    }
+
+    function closeModal() {
+      modalCustomizer.classList.remove('active');
+      activePrompt = null;
+    }
+
+    function updateModalPreview() {
+      if (!activePrompt) return;
+      const vars = extractVariables(activePrompt.prompt);
+      const filled = vars.filter(v => inputValues[v.key] && inputValues[v.key].trim().length > 0).length;
+      modalVarsCount.textContent = `${filled} of ${vars.length} filled`;
+
+      modalPromptPreview.innerHTML = highlightFilledPrompt(activePrompt.prompt, inputValues);
+    }
+
+    function copyToClipboardText(text, btnElement, successMsg) {
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btnElement.textContent;
+        btnElement.textContent = successMsg;
+        btnElement.classList.add('copied');
+        setTimeout(() => {
+          btnElement.textContent = orig;
+          btnElement.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        const orig = btnElement.textContent;
+        btnElement.textContent = successMsg;
+        btnElement.classList.add('copied');
+        setTimeout(() => {
+          btnElement.textContent = orig;
+          btnElement.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    modalFillSampleBtn.addEventListener('click', () => {
+      if (!activePrompt) return;
+      const vars = extractVariables(activePrompt.prompt);
+      vars.forEach((v, idx) => {
+        const l = v.key.toLowerCase();
+        let val = 'Standard ' + v.label;
+        if (l.includes('target audience')) val = 'B2B SaaS Founders & Product Leaders';
+        else if (l.includes('product/service')) val = 'AI-powered workflow automation platform';
+        else if (l.includes('marketing channel')) val = 'LinkedIn Sponsored Posts & Executive Newsletters';
+        else if (l.includes('unique differentiator')) val = 'Zero-code real-time synchronization with 99.4% SLA';
+        else if (l.includes('job title')) val = 'VP of Engineering';
+        else if (l.includes('industry')) val = 'Fintech & Cloud Infrastructure';
+        else if (l.includes('company size')) val = '50–250 employees';
+        else if (l.includes('pain point')) val = 'Manual compliance audits taking 40 hours per release';
+        else if (l.includes('price point') || l.includes('deal value')) val = '$24,000/year';
+
+        inputValues[v.key] = val;
+        const field = document.getElementById(`var-in-${idx}`);
+        if (field) field.value = val;
+      });
+      updateModalPreview();
+    });
+
+    modalCopyFilledBtn.addEventListener('click', () => {
+      if (!activePrompt) return;
+      const filledText = buildFilledPrompt(activePrompt.prompt, inputValues);
+      copyToClipboardText(filledText, modalCopyFilledBtn, '✓ Copied completed prompt!');
+    });
+
+    modalCopyTemplateBtn.addEventListener('click', () => {
+      if (!activePrompt) return;
+      copyToClipboardText(activePrompt.prompt, modalCopyTemplateBtn, '✓ Template copied');
+    });
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalBackBtn.addEventListener('click', closeModal);
+    modalCustomizer.addEventListener('click', (e) => {
+      if (e.target === modalCustomizer) closeModal();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalCustomizer.classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    // ─── RENDER PROMPTS GRID (Shows only prompt names) ───
+    function renderGrid() {
+      const filtered = PROMPTS_DATA.filter(function(item) {
+        const matchesCategory = (currentCategory === 'All' || item.category === currentCategory);
+        const q = searchQuery.toLowerCase().trim();
+        const matchesSearch = !q || 
+          item.title.toLowerCase().includes(q) || 
+          item.prompt.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q);
+        return matchesCategory && matchesSearch;
+      });
+
+      // Update counter pill dynamically
+      counterText.innerHTML = `Showing <strong style="color: var(--gold2);">${filtered.length}</strong> of ${PROMPTS_DATA.length}`;
+
+      if (filtered.length === 0) {
+        promptGrid.innerHTML = `
+          <div class="empty-state">
+            <h3 style="margin-bottom: 0.5rem; color: var(--text);">No matching business prompt names found</h3>
+            <p style="color: var(--muted); font-size: 0.85rem;">Try adjusting your search keywords or switching category filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      promptGrid.innerHTML = filtered.map(function(item) {
+        const numStr = '#' + String(item.id).padStart(2, '0');
+        const vars = extractVariables(item.prompt);
+        return `
+          <div class="prompt-card" data-id="${item.id}" role="button" tabindex="0">
+            <div class="card-top-accent" style="background-color: ${item.color};"></div>
+            <div class="card-body">
+              <div>
+                <div class="card-meta">
+                  <span class="prompt-number mono">${numStr}</span>
+                  <span class="category-badge" style="color: ${item.color}; background-color: ${item.color}1a; border: 1px solid ${item.color}33;">
+                    ${item.category}
+                  </span>
+                </div>
+                <h3 class="card-title">${item.title}</h3>
+              </div>
+              <div class="card-footer">
+                <span>${vars.length} input${vars.length === 1 ? '' : 's'} to fill</span>
+                <span class="card-action-cue">Fill & Copy &rarr;</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach card click handlers to open modal
+      document.querySelectorAll('.prompt-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          const id = parseInt(this.getAttribute('data-id'), 10);
+          const found = PROMPTS_DATA.find(p => p.id === id);
+          if (found) openModal(found);
+        });
+      });
+    }
+
+    // ─── SEARCH & FILTER LISTENERS ───
+    searchBar.addEventListener('input', function(e) {
+      searchQuery = e.target.value;
+      renderGrid();
+    });
+
+    filterContainer.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-filter')) {
+        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentCategory = e.target.getAttribute('data-category');
+        renderGrid();
+      }
+    });
+
+  </script>
+</body>
+</html>
