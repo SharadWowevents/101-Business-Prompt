@@ -26,6 +26,8 @@ mongoose.connect(process.env.MONGODB_URI)
  * @desc    Capture lead data or update existing user
  */
 app.post('/api/users/login', async (req, res) => {
+
+    console.log('req.body');
   try {
     const { name, email, mobile } = req.body;
 
