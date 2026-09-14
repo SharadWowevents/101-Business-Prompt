@@ -15,7 +15,7 @@ export default function App() {
     
     // Fetch live prompts from your new Express backend once logged in
     try {
-      const res = await fetch('http://localhost:5008/api/prompts');
+      const res = await fetch('/api/prompts');
       const data = await res.json();
       setPrompts(data);
     } catch (error) {

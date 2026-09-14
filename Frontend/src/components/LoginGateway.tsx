@@ -29,7 +29,7 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
     setIsVerifying(true);
 
     try {
-      const response = await fetch('http://localhost:5008/api/users/login', {
+      const response = await fetch('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), email: email.trim(), mobile: mobile.trim() }),
