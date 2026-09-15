@@ -237,7 +237,7 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
 
             {/* Helper Action Buttons */}
             <div className="flex items-center justify-between gap-2 pt-1">
-              <button
+              {/* <button
                 type="button"
                 id="fill-sample-btn"
                 onClick={handleFillSample}
@@ -245,7 +245,7 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
               >
                 <Sparkles className="w-3.5 h-3.5 text-[var(--gold)]" />
                 <span>Fill with sample data</span>
-              </button>
+              </button> */}
 
               {filledCount > 0 && (
                 <button
@@ -378,12 +378,12 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
                 ) : (
                   <>
                     <Copy className="w-4 h-4 text-[var(--navy)]" />
-                    <span>Copy prompt with filled inputs</span>
+                    <span>Copy prompt</span>
                   </>
                 )}
               </button>
 
-              {/* Secondary: Copy raw template */}
+              {/* Secondary: Copy raw template
               <button
                 id="copy-raw-template-btn"
                 type="button"
@@ -401,7 +401,7 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
                     <span>Copy original template (with [brackets])</span>
                   </>
                 )}
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
