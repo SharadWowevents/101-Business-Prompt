@@ -4,7 +4,6 @@ import {
   Copy,
   Check,
   ArrowLeft,
-  Sparkles,
   RotateCcw,
   CheckCircle2,
   AlertCircle,
@@ -16,7 +15,6 @@ import {
   extractVariables,
   buildFilledPrompt,
   highlightFilledPrompt,
-  PromptVariable,
 } from '../utils/promptParser';
 
 interface PromptCustomizerModalProps {
@@ -31,7 +29,6 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
   const variables = useMemo(() => extractVariables(prompt.prompt), [prompt.prompt]);
   const [values, setValues] = useState<Record<string, string>>({});
   const [copiedFilled, setCopiedFilled] = useState(false);
-  const [copiedTemplate, setCopiedTemplate] = useState(false);
 
   // Close on Escape key press
   useEffect(() => {
@@ -69,52 +66,6 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
     setValues({});
   };
 
-  const handleFillSample = () => {
-    const sampleValues: Record<string, string> = {};
-    for (const v of variables) {
-      const lower = v.key.toLowerCase();
-      if (lower.includes('target audience')) sampleValues[v.key] = 'B2B SaaS Founders & Product Leaders';
-      else if (lower.includes('product/service description') || lower.includes('product/service') || lower.includes('offering'))
-        sampleValues[v.key] = 'AI-powered workflow automation platform';
-      else if (lower.includes('marketing channel')) sampleValues[v.key] = 'LinkedIn Sponsored Posts & Executive Newsletters';
-      else if (lower.includes('unique differentiator') || lower.includes('unfair advantage'))
-        sampleValues[v.key] = 'Zero-code real-time synchronization with 99.4% uptime guarantee';
-      else if (lower.includes('job title')) sampleValues[v.key] = 'VP of Engineering';
-      else if (lower.includes('target industry') || lower.includes('industry')) sampleValues[v.key] = 'Fintech & Cloud Infrastructure';
-      else if (lower.includes('company size')) sampleValues[v.key] = '50–250 employees';
-      else if (lower.includes('primary pain point') || lower.includes('bottleneck') || lower.includes('specific problem'))
-        sampleValues[v.key] = 'Manual security compliance reviews taking 40 hours per release cycle';
-      else if (lower.includes('lead magnet') || lower.includes('case study'))
-        sampleValues[v.key] = '2026 Enterprise Security Benchmark Report';
-      else if (lower.includes('product category')) sampleValues[v.key] = 'Developer Productivity Tools';
-      else if (lower.includes('buyer persona') || lower.includes('role/demographic'))
-        sampleValues[v.key] = 'Engineering Directors managing distributed remote teams';
-      else if (lower.includes('solution type') || lower.includes('solution name'))
-        sampleValues[v.key] = 'WOWOS Continuous Delivery Suite';
-      else if (lower.includes('timeframe') || lower.includes('deadline')) sampleValues[v.key] = 'Q4 Procurement Cycle';
-      else if (lower.includes('price point') || lower.includes('deal value') || lower.includes('budget amount'))
-        sampleValues[v.key] = '$24,000/year';
-      else if (lower.includes('alternative solution') || lower.includes('competitor'))
-        sampleValues[v.key] = 'Legacy ERP Solutions';
-      else if (lower.includes('roi') || lower.includes('upside') || lower.includes('revenue impact'))
-        sampleValues[v.key] = '3.8x ROI with 45% reduction in manual review hours';
-      else if (lower.includes('company name')) sampleValues[v.key] = 'Apex Flow Systems';
-      else if (lower.includes('arpu')) sampleValues[v.key] = '$250/month';
-      else if (lower.includes('cac')) sampleValues[v.key] = '$600';
-      else if (lower.includes('churn rate')) sampleValues[v.key] = '1.5%';
-      else if (lower.includes('cash balance')) sampleValues[v.key] = '$1,200,000';
-      else if (lower.includes('monthly expenses')) sampleValues[v.key] = '$85,000';
-      else if (lower.includes('current mrr')) return sampleValues[v.key] = '$120,000';
-      else if (lower.includes('vendor name')) sampleValues[v.key] = 'CloudCorp Global';
-      else if (lower.includes('annual spend')) sampleValues[v.key] = '$48,000';
-      else if (lower.includes('employee name')) sampleValues[v.key] = 'Alex Morgan';
-      else if (lower.includes('executive name')) sampleValues[v.key] = 'Elena Rostova, CEO';
-      else if (lower.includes('knowledge base link')) sampleValues[v.key] = 'https://docs.wowos.internal/kb';
-      else sampleValues[v.key] = `Standard ${v.label}`;
-    }
-    setValues(sampleValues);
-  };
-
   const copyToClipboard = async (text: string, isFilled: boolean) => {
     try {
       if (navigator.clipboard && window.isSecureContext) {
@@ -135,9 +86,6 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
       if (isFilled) {
         setCopiedFilled(true);
         setTimeout(() => setCopiedFilled(false), 2000);
-      } else {
-        setCopiedTemplate(true);
-        setTimeout(() => setCopiedTemplate(false), 2000);
       }
     } catch (err) {
       console.error('Failed to copy prompt: ', err);
@@ -236,17 +184,7 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
             </div>
 
             {/* Helper Action Buttons */}
-            <div className="flex items-center justify-between gap-2 pt-1">
-              {/* <button
-                type="button"
-                id="fill-sample-btn"
-                onClick={handleFillSample}
-                className="inline-flex items-center gap-1.5 text-xs text-[var(--gold2)] hover:text-white bg-[var(--surface)] hover:bg-[var(--gold)]/20 px-3 py-1.5 rounded-md border border-[var(--gold)]/30 font-medium transition-colors cursor-pointer"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[var(--gold)]" />
-                <span>Fill with sample data</span>
-              </button> */}
-
+            <div className="flex items-center justify-end gap-2 pt-1">
               {filledCount > 0 && (
                 <button
                   type="button"
@@ -276,10 +214,11 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
                         htmlFor={`var-input-${idx}`}
                         className="text-xs font-semibold text-[var(--text)] tracking-wide flex items-center gap-1.5"
                       >
-                        <span className="w-4 h-4 rounded-full bg-[var(--navy)] text-[var(--gold)] text-[10px] font-bold flex items-center justify-center">
+                        <span className="w-4 h-4 rounded-full bg-[var(--navy)] text-[var(--gold)] text-[10px] font-bold flex items-center justify-center shrink-0">
                           {idx + 1}
                         </span>
-                        <span>{variable.label}</span>
+                        {/* THE FIX: Added capitalize class here */}
+                        <span className="capitalize">{variable.label}</span>
                       </label>
 
                       {isFilled ? (
@@ -382,26 +321,6 @@ export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
                   </>
                 )}
               </button>
-
-              {/* Secondary: Copy raw template
-              <button
-                id="copy-raw-template-btn"
-                type="button"
-                onClick={() => copyToClipboard(prompt.prompt, false)}
-                className="w-full py-2.5 px-4 rounded-lg font-medium text-xs text-[var(--muted)] hover:text-[var(--text)] bg-[var(--surface)] hover:bg-[var(--navy3)] border border-[var(--border)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                {copiedTemplate ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">✓ Template copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5 text-[var(--muted)]" />
-                    <span>Copy original template (with [brackets])</span>
-                  </>
-                )}
-              </button> */}
             </div>
           </div>
         </div>
