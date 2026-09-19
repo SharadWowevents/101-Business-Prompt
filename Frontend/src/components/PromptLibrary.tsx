@@ -1,253 +1,199 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import {
-  X,
-  Copy,
-  Check,
-  ArrowLeft,
-  RotateCcw,
-  CheckCircle2,
-  AlertCircle,
-  Sliders,
-  FileText,
-} from 'lucide-react';
-import { PromptItem, CATEGORY_COLORS, UserCredentials } from '../types';
-import {
-  extractVariables,
-  buildFilledPrompt,
-  highlightFilledPrompt,
-} from '../utils/promptParser';
+import React, { useState, useMemo } from 'react';
+import { Search, Sparkles, X, SlidersHorizontal, LogOut, Info } from 'lucide-react';
+import { PromptItem, Category, CATEGORIES, UserCredentials } from '../types';
+import { PromptCard } from './PromptCard';
+import { PromptCustomizerModal } from './PromptCustomizerModal';
 
-interface PromptCustomizerModalProps {
-  prompt: PromptItem;
-  user: UserCredentials | null; // <-- Added user to props interface
-  onClose: () => void;
+interface PromptLibraryProps {
+  prompts: PromptItem[];
+  user: UserCredentials | null;
+  onLogout: () => void;
 }
 
-export const PromptCustomizerModal: React.FC<PromptCustomizerModalProps> = ({
-  prompt,
-  user, // <-- Destructured user
-  onClose,
+export const PromptLibrary: React.FC<PromptLibraryProps> = ({
+  prompts,
+  user,
+  onLogout,
 }) => {
-  const variables = useMemo(() => extractVariables(prompt.prompt), [prompt.prompt]);
-  const [values, setValues] = useState<Record<string, string>>({});
-  const [copiedFilled, setCopiedFilled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<Category>('All');
+  const [activePrompt, setActivePrompt] = useState<PromptItem | null>(null);
 
-  // Close on Escape key press
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  // Real-time filtering
+  const filteredPrompts = useMemo(() => {
+    return prompts.filter((item) => {
+      const matchesCategory =
+        selectedCategory === 'All' || item.category === selectedCategory;
 
-  const categoryColor = CATEGORY_COLORS[prompt.category] || 'var(--gold)';
-  const formattedNumber = `#${prompt.number.toString().padStart(2, '0')}`;
+      const query = searchQuery.trim().toLowerCase();
+      const matchesSearch =
+        !query ||
+        item.title.toLowerCase().includes(query) ||
+        item.prompt.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query);
 
-  const filledCount = variables.filter(
-    (v) => values[v.key] && values[v.key].trim().length > 0
-  ).length;
-  const allFilled = variables.length > 0 && filledCount === variables.length;
-  const progressPercent =
-    variables.length > 0 ? Math.round((filledCount / variables.length) * 100) : 100;
+      return matchesCategory && matchesSearch;
+    });
+  }, [prompts, selectedCategory, searchQuery]);
 
-  const filledPromptText = useMemo(() => {
-    return buildFilledPrompt(prompt.prompt, values);
-  }, [prompt.prompt, values]);
-
-  const handleInputChange = (key: string, val: string) => {
-    setValues((prev) => ({
-      ...prev,
-      [key]: val,
-    }));
-  };
-
-  const handleClearAll = () => {
-    setValues({});
-  };
-
-  const copyToClipboard = async (text: string, isFilled: boolean) => {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        document.execCommand('copy');
-        textArea.remove();
-      }
-
-      // --- FIRE AND FORGET LOGGING CALL TO BACKEND ---
-      if (user) {
-        fetch('/api/prompts/log', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user: user,
-            prompt: { id: prompt.id, title: prompt.title },
-            filledInputs: values,
-            copiedText: text
-          })
-        }).catch(err => console.error('Silent tracking failed:', err));
-      }
-      // -----------------------------------------------
-
-      if (isFilled) {
-        setCopiedFilled(true);
-        setTimeout(() => setCopiedFilled(false), 2000);
-      }
-    } catch (err) {
-      console.error('Failed to copy prompt: ', err);
-    }
-  };
+  const totalCount = prompts.length;
+  const filteredCount = filteredPrompts.length;
 
   return (
-    <div
-      id="prompt-customizer-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto"
-    >
-      <div
-        id="prompt-customizer-modal"
-        className="relative w-full max-w-5xl bg-[var(--card)] border border-[var(--border2)] rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden my-auto"
-      >
-        <div className="h-1.5 w-full shrink-0" style={{ backgroundColor: categoryColor }} />
-
-        <div className="px-6 py-4 sm:py-5 border-b border-[var(--border)] flex items-center justify-between gap-4 bg-[var(--navy2)]/60 shrink-0">
-          <div className="flex items-center gap-3 min-w-0">
-            <button
-              onClick={onClose}
-              className="inline-flex items-center gap-1.5 text-xs text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] px-2.5 py-1.5 rounded-lg border border-transparent hover:border-[var(--border)] transition-colors cursor-pointer shrink-0"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Back to Prompts</span>
-            </button>
-            <div className="h-5 w-[1px] bg-[var(--border)] hidden sm:block shrink-0" />
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-xs font-mono font-bold text-[var(--gold)]">{formattedNumber}</span>
-                <span
-                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider"
-                  style={{ color: categoryColor, backgroundColor: `${categoryColor}18`, border: `1px solid ${categoryColor}33` }}
-                >
-                  {prompt.category}
+    <div id="library-view" className="min-h-screen flex flex-col library-bg">
+      <header className="sticky top-0 z-40 w-full bg-[var(--navy)]/90 backdrop-blur-md border-b border-[var(--border)] transition-colors duration-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[var(--surface)] border border-[var(--gold)]/40 flex items-center justify-center text-[var(--gold)] shadow-sm">
+              <img src="/logo.png" alt="WOWOS Logo" className="h-10 w-auto object-contain" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold tracking-[0.2em] text-[var(--gold)] uppercase">
+                  WOWOS FAST TRACK
                 </span>
               </div>
-              <h2 className="text-base sm:text-lg font-bold text-[var(--text)] truncate" title={prompt.title}>
-                {prompt.title}
-              </h2>
+              <h1 className="text-sm sm:text-base font-semibold text-[var(--text)] tracking-tight">
+                101 Business Prompts
+              </h1>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] rounded-lg transition-colors cursor-pointer shrink-0">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
 
-        <div className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[var(--border)]">
-          <div className="lg:col-span-6 p-5 sm:p-6 space-y-5 overflow-y-auto bg-[var(--card)]">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-[var(--gold)]" />
-                <h3 className="text-sm font-bold text-[var(--text)] tracking-wide uppercase">Fill Prompt Inputs</h3>
-              </div>
-              <span className="text-xs font-medium text-[var(--muted)]">
-                <span className="text-[var(--gold2)] font-bold">{filledCount}</span> of {variables.length} filled
+          <div className="flex items-center gap-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[var(--surface)] border border-[var(--border2)] text-[var(--text)] shadow-inner">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)]" />
+              <span>
+                Showing <strong className="text-[var(--gold2)] font-semibold">{filteredCount}</strong> of {totalCount}
               </span>
             </div>
 
-            <div className="w-full h-1.5 bg-[var(--surface)] rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold2)] transition-all duration-300" style={{ width: `${progressPercent}%` }} />
-            </div>
-
-            <div className="flex items-center justify-end gap-2 pt-1">
-              {filledCount > 0 && (
-                <button onClick={handleClearAll} className="inline-flex items-center gap-1 text-xs text-[var(--muted)] hover:text-rose-400 transition-colors cursor-pointer">
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Clear all</span>
+            {user && (
+              <div className="hidden sm:flex items-center gap-2 pl-3 border-l border-[var(--border)]">
+                <span className="text-xs text-[var(--muted)] max-w-[120px] truncate" title={user.name}>
+                  {user.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  title="Lock vault and return to gateway"
+                  className="p-1.5 text-[var(--muted)] hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors duration-150 cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
                 </button>
-              )}
-            </div>
-
-            <div className="space-y-4 pt-1">
-              {variables.map((variable, idx) => {
-                const isFilled = values[variable.key] && values[variable.key].trim().length > 0;
-                return (
-                  <div key={variable.key} className="p-3.5 bg-[var(--surface)] border border-[var(--border)] rounded-xl focus-within:border-[var(--gold)] transition-colors">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-xs font-semibold text-[var(--text)] tracking-wide flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-[var(--navy)] text-[var(--gold)] text-[10px] font-bold flex items-center justify-center shrink-0">
-                          {idx + 1}
-                        </span>
-                        {/* Title Casing Applied Here */}
-                        <span className="capitalize">{variable.label}</span>
-                      </label>
-                      {isFilled ? (
-                        <span className="text-[11px] text-emerald-400 flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" /><span>Filled</span></span>
-                      ) : (
-                        <span className="text-[11px] text-[var(--faint)]">Required</span>
-                      )}
-                    </div>
-                    <input
-                      type="text"
-                      value={values[variable.key] || ''}
-                      onChange={(e) => handleInputChange(variable.key, e.target.value)}
-                      placeholder={variable.placeholder}
-                      className="w-full bg-[var(--navy)] text-[var(--text)] placeholder-[var(--faint)] text-sm px-3.5 py-2.5 rounded-lg border border-[rgba(255,255,255,0.06)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] transition-colors"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between bg-[var(--navy2)]/40 overflow-y-auto space-y-5">
-            <div className="space-y-3 flex-1 flex flex-col">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[var(--gold2)]" />
-                  <h3 className="text-sm font-bold text-[var(--text)] tracking-wide uppercase">Live Completed Prompt</h3>
-                </div>
-                {allFilled ? (
-                  <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20"><CheckCircle2 className="w-3.5 h-3.5" />All inputs filled</span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 text-xs text-[var(--gold2)] font-medium bg-[var(--gold)]/10 px-2.5 py-0.5 rounded-full border border-[var(--gold)]/20"><AlertCircle className="w-3.5 h-3.5" />{variables.length - filledCount} bracket{variables.length - filledCount > 1 ? 's' : ''} remaining</span>
-                )}
               </div>
-
-              <div className="flex-1 bg-[var(--surface)] border border-[rgba(255,255,255,0.08)] rounded-xl p-4 sm:p-5 text-[13.5px] leading-relaxed text-[#D6DCE7] font-mono-code overflow-y-auto select-text shadow-inner min-h-[220px]">
-                <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: highlightFilledPrompt(prompt.prompt, values) }} />
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 text-[11px] text-[var(--muted)] pt-1">
-                <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-emerald-500/80" /><span>Green = Your filled inputs</span></div>
-                <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-[var(--gold2)]/80" /><span>Gold = Bracket placeholders</span></div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-[var(--border)] space-y-2.5">
-              <button
-                onClick={() => copyToClipboard(filledPromptText, true)}
-                className={`w-full py-3.5 px-4 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg ${
-                  copiedFilled ? 'bg-emerald-600 text-white shadow-emerald-900/30' : 'bg-[var(--gold)] hover:bg-[var(--gold2)] text-[var(--navy)] active:scale-[0.99] shadow-[var(--gold)]/20'
-                }`}
-              >
-                {copiedFilled ? (
-                  <><Check className="w-4 h-4 text-white" /><span>✓ Copied completed prompt to clipboard!</span></>
-                ) : (
-                  <><Copy className="w-4 h-4 text-[var(--navy)]" /><span>Copy prompt</span></>
-                )}
-              </button>
-            </div>
+            )}
           </div>
         </div>
-      </div>
+      </header>
+
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+        <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[var(--surface)]/70 border border-[var(--border)] text-xs text-[var(--muted)]">
+          <div className="flex items-center gap-2.5">
+            <Info className="w-4 h-4 text-[var(--gold)] shrink-0" />
+            <span>
+              Click on any business prompt below to fill its custom parameters and copy the finalized, ready-to-run prompt.
+            </span>
+          </div>
+          <span className="hidden md:inline-block text-[11px] font-semibold text-[var(--gold2)] uppercase tracking-wider bg-[var(--gold)]/10 px-2 py-0.5 rounded">
+            Interactive Prompt Engine
+          </span>
+        </div>
+
+        <section className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--muted)]">
+              <Search className="w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search prompt names, business areas, or keywords..."
+              className="w-full pl-10 pr-10 py-2.5 bg-[var(--surface)] text-[var(--text)] placeholder-[var(--faint)] text-sm rounded-lg border border-[var(--border)] focus:outline-none focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)] transition-colors duration-150"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[var(--muted)] hover:text-[var(--text)] transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
+            <div className="flex items-center gap-1.5 text-xs text-[var(--muted)] pr-2 font-medium shrink-0">
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Category:</span>
+            </div>
+            {CATEGORIES.map((cat) => {
+              const isSelected = selectedCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
+                    isSelected
+                      ? 'bg-[var(--gold)] text-[var(--navy)] shadow-sm'
+                      : 'bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--navy3)] border border-[var(--border)]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {filteredPrompts.length > 0 ? (
+          <div
+            className="grid gap-4 sm:gap-5"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}
+          >
+            {filteredPrompts.map((item) => (
+              <PromptCard
+                key={item.id}
+                item={item}
+                onSelect={(selected) => setActivePrompt(selected)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 px-4 bg-[var(--card)] border border-[var(--border)] rounded-xl">
+            <div className="w-12 h-12 mx-auto rounded-full bg-[var(--surface)] flex items-center justify-center text-[var(--muted)] mb-3">
+              <Search className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-semibold text-[var(--text)] mb-1">
+              No matching business prompt names found
+            </h3>
+            <p className="text-xs text-[var(--muted)] max-w-sm mx-auto mb-4">
+              Try adjusting your search terms or selecting a different category filter.
+            </p>
+            <button
+              type="button"
+              onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
+              className="px-4 py-2 bg-[var(--surface)] hover:bg-[var(--navy3)] text-xs text-[var(--gold2)] border border-[var(--border)] rounded-md font-medium transition-colors cursor-pointer"
+            >
+              Reset all filters
+            </button>
+          </div>
+        )}
+      </main>
+
+      {/* MODAL IS RENDERED HERE: Passing the user prop for backend logging */}
+      {activePrompt && (
+        <PromptCustomizerModal
+          prompt={activePrompt}
+          user={user}
+          onClose={() => setActivePrompt(null)}
+        />
+      )}
+
+      <footer className="w-full border-t border-[var(--border)] py-6 text-center text-xs text-[var(--faint)]">
+        <p>WOWOS Fast Track — 101 Business Prompts • Dark Mode Executive Edition</p>
+      </footer>
     </div>
   );
 };
