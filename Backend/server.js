@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const User = require('./models/User');
 const Prompt = require('./models/Prompt');
+const PromptLog = require('./models/Promptlog'); // <-- Import the new model
 
 const app = express();
 
@@ -26,8 +27,6 @@ mongoose.connect(process.env.MONGODB_URI)
  * @desc    Capture lead data or update existing user
  */
 app.post('/api/users/login', async (req, res) => {
-
-    
   try {
     const { name, email, mobile } = req.body;
 
@@ -67,6 +66,36 @@ app.get('/api/prompts', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error fetching prompts.' });
+  }
+});
+
+/**
+ * @route   POST /api/prompts/log
+ * @desc    Track which user copied which prompt and what they typed
+ */
+app.post('/api/prompts/log', async (req, res) => {
+  try {
+    const { user, prompt, filledInputs, copiedText } = req.body;
+
+    if (!user || !user.email || !prompt || !prompt.id) {
+      return res.status(400).json({ message: 'Missing required tracking data.' });
+    }
+
+    const newLog = new PromptLog({
+      userName: user.name || 'Unknown',
+      userEmail: user.email,
+      userMobile: user.mobile || 'N/A',
+      promptId: prompt.id,
+      promptTitle: prompt.title,
+      filledInputs: filledInputs || {},
+      copiedText: copiedText || ''
+    });
+
+    await newLog.save();
+    res.status(201).json({ message: 'Log captured successfully' });
+  } catch (error) {
+    console.error('Error logging prompt usage:', error);
+    res.status(500).json({ message: 'Server error logging usage.' });
   }
 });
 
