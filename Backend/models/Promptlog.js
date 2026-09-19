@@ -6,8 +6,9 @@ const promptLogSchema = new mongoose.Schema({
   userMobile: { type: String },
   promptId: { type: String, required: true },
   promptTitle: { type: String, required: true },
-  filledInputs: { type: mongoose.Schema.Types.Mixed }, // Stores { "describe business": "SaaS Platform", ... }
-  copiedText: { type: String } // The final generated text they copied
-}, { timestamps: true }); // Automatically adds 'createdAt' date
+  originalTemplate: { type: String }, // Stores the template with brackets
+  filledInputs: { type: mongoose.Schema.Types.Mixed }, // Stores user's custom inputs
+  finalFilledPrompt: { type: String } // The finished text they copied
+}, { timestamps: true });
 
 module.exports = mongoose.model('PromptLog', promptLogSchema);

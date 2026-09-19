@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const User = require('./models/User');
 const Prompt = require('./models/Prompt');
-const PromptLog = require('./models/Promptlog'); // <-- Import the new model
+const PromptLog = require('./models/PromptLog'); // <-- Import the new model
 
 const app = express();
 
@@ -69,15 +69,16 @@ app.get('/api/prompts', async (req, res) => {
   }
 });
 
+
 /**
  * @route   POST /api/prompts/log
  * @desc    Track which user copied which prompt and what they typed
  */
 app.post('/api/prompts/log', async (req, res) => {
   try {
-    const { user, prompt, filledInputs, copiedText } = req.body;
+    const { user, promptId, promptTitle, originalTemplate, filledInputs, finalFilledPrompt } = req.body;
 
-    if (!user || !user.email || !prompt || !prompt.id) {
+    if (!user || !user.email || !promptId) {
       return res.status(400).json({ message: 'Missing required tracking data.' });
     }
 
@@ -85,10 +86,11 @@ app.post('/api/prompts/log', async (req, res) => {
       userName: user.name || 'Unknown',
       userEmail: user.email,
       userMobile: user.mobile || 'N/A',
-      promptId: prompt.id,
-      promptTitle: prompt.title,
+      promptId: promptId,
+      promptTitle: promptTitle,
+      originalTemplate: originalTemplate || '',
       filledInputs: filledInputs || {},
-      copiedText: copiedText || ''
+      finalFilledPrompt: finalFilledPrompt || ''
     });
 
     await newLog.save();
@@ -98,6 +100,7 @@ app.post('/api/prompts/log', async (req, res) => {
     res.status(500).json({ message: 'Server error logging usage.' });
   }
 });
+
 
 /**
  * @route   POST /api/prompts
