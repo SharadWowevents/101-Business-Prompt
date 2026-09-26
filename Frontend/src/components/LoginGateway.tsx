@@ -10,6 +10,7 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false); // <-- New state for checkbox
   const [isVerifying, setIsVerifying] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -23,6 +24,11 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
     }
     if (!email.includes('@') || !email.includes('.')) {
       setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+    // <-- New Validation Check
+    if (!acceptedTerms) {
+      setErrorMessage('You must agree to the Terms of Service and Privacy Policy.');
       return;
     }
 
@@ -72,7 +78,6 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
             id="login-eyebrow"
             className="flex flex-col items-center justify-center gap-2 text-[11px] font-bold tracking-[0.25em] text-[var(--gold)] uppercase mb-3"
           >
-            {/* Replace '/logo.png' with the actual path to your logo in the public folder */}
             <img 
               src="/logo.png" 
               alt="WOWOS Logo" 
@@ -148,6 +153,42 @@ export const LoginGateway: React.FC<LoginGatewayProps> = ({ onLoginSuccess }) =>
               placeholder="+1 (555) 019-2834"
               className="w-full bg-[var(--surface)] text-[var(--text)] placeholder-[var(--faint)] text-sm px-4 py-3 rounded-t-lg border-0 border-b-2 border-[var(--border)] focus:border-[var(--gold)] focus:outline-none transition-colors duration-200"
             />
+          </div>
+
+          {/* <-- NEW: Terms and Privacy Checkbox --> */}
+          <div className="flex items-start gap-2.5 pt-1">
+            <div className="flex items-center h-5">
+              <input
+                id="terms-checkbox"
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                disabled={isVerifying}
+                className="w-4 h-4 mt-0.5 accent-[var(--gold)] cursor-pointer rounded border-[var(--border)]"
+              />
+            </div>
+            <label htmlFor="terms-checkbox" className="text-xs text-[var(--muted)] leading-relaxed cursor-pointer select-none">
+              I agree to the{' '}
+              <a 
+                href="https://wowos.in/terms" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-[var(--gold)] hover:underline hover:text-[var(--gold2)] transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Terms of Service
+              </a>
+              {' '}and{' '}
+              <a 
+                href="https://wowos.in/privacy" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-[var(--gold)] hover:underline hover:text-[var(--gold2)] transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Privacy Policy
+              </a>.
+            </label>
           </div>
 
           {/* Error Message */}
